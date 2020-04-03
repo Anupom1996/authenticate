@@ -1,0 +1,10 @@
+arup da 
+auth_token folder a:login,tokengenerate,hashcrypted password,authentication
+
+11thtask:11.03.2020 task ta ache      
+*****akahana sudhu bulk insert r validation ta baki ache amar
+25thtask:25.03.2020 task ta ache
+**************** akahan amar mail templating ta baki ache amar
+
+04task_mongoquery text file :
+akhana 01.04.2020 task tar only student data sheet gtr query ta ache
