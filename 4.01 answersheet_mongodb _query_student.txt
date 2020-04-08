@@ -1,0 +1,69 @@
+student data sheet
+
+
+****query1 :write a mongodb  query to find all student who score greater than 85 in exam?
+1.jodi ami sb dakhte chai tahala id and name 
+answer:
+db.student1.aggregate
+	( 
+		 { $unwind : "$scores" },
+		 { $match : {      "scores.type": "exam"   }},    
+		  { $match : {      "scores.score": {$gte:15}  }} 
+	)
+2.jodi sudhu name tai dakhte chai but id dakhbo na ba details kichu dakhbo tahla :
+answer:
+ db.student1.aggregate
+	(  
+		{ $unwind : "$scores" },
+		 { $match : {      "scores.type": "exam"   }}, 
+		{$project:{_id:0}},   
+		  { $match : {      "scores.score": {$gte:15}  }} 
+	)
+
+
+
+****query2:............................
+write a mongodb query to find average marks obtain by each user?
+
+
+1.ata holo id r upor depend kore every user average each marks..................................................
+
+ db.student.aggregate
+	( 
+		{$unwind:"$scores"}, 
+		{$group: { _id:"$_id", average:{$avg:"$scores.score"}, count:{$sum:1} } } 
+	)
+2.ami jodi every name r upor kortam tahala alada hoto because akhana same name 2 bar ache tai
+ db.student.aggregate
+	( 
+		{$unwind:"$scores"},
+		 {$group: { _id:"$name", average:{$avg:"$scores.score"}, count:{$sum:1} } }
+	 )
+
+
+
+******query:3......................................
+write a mongodb query to find get the student dertails who scored the heighest
+
+
+answer:db.student.aggregate(
+			 	 { $unwind : "$scores" }, 
+				{ $match : {      "scores.type": "exam"   }},
+				{$sort:{"scores.score":-1}},
+				{$limit:1}
+		)
+//second heighest no
+
+**db.student.aggregate(  { $unwind : "$scores" }, { $match : {      "scores.type": "exam"   }},{$sort:{"scores.score":-1}},{$limit:2},{$skip:1})////second heighest in exam
+db.student.aggregate
+
+*****query4:............................
+write a mongodb query to find get the student details who scored heighest marks in any type
+
+
+answer: db.student.aggregate( {$unwind:"$scores"},  {$group: { _id:"$_id", heighest_any:{$max:"$scores.score"}, count:{$sum:1} } },{$sort:{"heighest_any":-1}}  )
+
+answer:2(same question query:4)
+answer:   db.student.aggregate( {$project:{name:1, "scores.score":1, heighest_any:{$max:"$scores.score"} } },{$sort:{"heighest_any":-1}},{$limit:1} )
+//output
+{ "_id" : 69, "name" : "Cody Strouth", "scores" : [ { "score" : 4.784730508547719 }, { "score" : 99.80348240553108 }, { "score" : 97.89665889862901 } ], "heighest_any" : 99.80348240553108 }

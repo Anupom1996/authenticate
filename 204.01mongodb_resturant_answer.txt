@@ -1,0 +1,114 @@
+query:1
+***********write a mongodb query to get ditinct categories?
+
+answer:       db.resturant.distinct("name")              ///akhana ami category k name hisabe dhorlam
+		or......
+db.runCommand(
+...    {
+...       distinct: "resturant1",
+...       key: "name",
+...
+...    }
+... )
+
+query:2 
+******write a mongodb query to find all no of resturant under each category?
+answer:
+db.resturant.aggregate(
+			{$group:
+				{_id:"$name",
+				count:{$sum:1}
+				}
+			}
+		)
+
+*******query:3
+***write a mongodb query to display all resturants serves Chinese food and having a rating greaater than 4
+answer:
+db.resturant.find( 
+		{   $and:
+			 [
+				{"rating":{$gt:4}}, 
+				{"type_of_food" : "Chinese"}
+			]
+		 }
+	 )
+
+
+*****query:4
+****write a mongodb query to find average rating of each categoty?
+answer:
+db.resturant.aggregate(
+			{$group:
+				{_id:"$name",
+				count:{$sum:1},
+				average_rating:{$avg:"$rating"}
+				}
+			}
+		)
+
+***query 5:
+****** write  a mongodb query to display all resturants which containts 'Blu'  as first theree letters of its name?
+answer:db.resturant1.find({"name":/^Blu/}) 
+
+*****query6:
+****write a mongodb query to find the resturant all category for those resturants which prepared dish except 'Gril' and 'curry'?
+
+answer:
+db.resturant.find(
+		{"type_of_food":{$nin:["Grill","Curry"]}
+		}
+	)
+
+****query:7:
+****write a mongodb query to find get the number of resturants that serves caribbean food  in london?
+
+******answer:
+	db.resturant.find( 
+			{   $and:  
+				[ 
+					{"address line 2" : "London"}, 
+					{"type_of_food" : "Caribbean"}	
+				 ]
+			  }
+		  )
+****query8
+write a query to convert upper case and concate the first and last name?
+answer
+db.concate.aggregate([{
+			$project:
+				{
+					adress:1,
+					Full_name:{$concat:
+							[ {$toUpper:'$first'},' ',{$toUpper:"$last"}]}
+				}
+		}])
+****query10:
+if i want output:    Anupom Das
+db.concate.aggregate([{
+			$project:
+				{
+					adress:1,
+					Full_name:{$concat:
+							[
+								{$toUpper:{$substrCP:['$first',0,1]}},
+								{$substrCP:["$first",1,{$subtract:[{$strLenCP:"$first"},1]}]},	
+								'  ',{$toUpper:"$last"}
+							]
+							
+						}
+				}
+		}])
+********query:11
+kivabe natun akta field  add korbo and kno value k convert lkorbo
+db.test.aggregate([{
+			$addFields:
+				{dec_num:{$convert:{input:"$num",to:"decimal"}}
+					
+				}},{
+			$addFields:
+				{
+					addfield:{$add:"$dec_num"}
+				}
+		}
+])
